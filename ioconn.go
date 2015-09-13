@@ -1,0 +1,82 @@
+// Package ioconn allows any combination of an io.Reader, io.Writer and io.Closer to become a net.Conn
+package ioconn
+
+import (
+	"errors"
+	"io"
+	"net"
+	"time"
+)
+
+// CloserFunc is a func that implements the io.Closer interface allowing a
+// closure or other function to be io.Closer
+type CloserFunc func() error
+
+// Close simply calls the CloserFunc func
+func (c CloserFunc) Close() error {
+	return c()
+}
+
+// FileAddr is a net.Addr that represents a file. Should be a full path
+type FileAddr string
+
+// Network always returns "file"
+func (f FileAddr) Network() string {
+	return "file"
+}
+
+// String returns file://path
+func (f FileAddr) String() string {
+	return "file://" + string(f)
+}
+
+// Addr is a simple implementation of the net.Addr interface
+type Addr struct {
+	Net, Str string
+}
+
+// Network returns the Net string
+func (a Addr) Network() string {
+	return a.Net
+}
+
+// String returns the Str string
+func (a Addr) String() string {
+	return a.Str
+}
+
+// Conn implements a net.Conn
+type Conn struct {
+	io.Reader
+	io.Writer
+	io.Closer
+	Local, Remote net.Addr
+}
+
+// LocalAddr returns the Local Address
+func (c Conn) LocalAddr() net.Addr {
+	return c.Local
+}
+
+// RemoteAddr returns the Remote Address
+func (c Conn) RemoteAddr() net.Addr {
+	return c.Remote
+}
+
+// SetDeadline is unimplemented and always returns an error
+func (Conn) SetDeadline(time.Time) error {
+	return ErrUnimplemented
+}
+
+// SetReadDeadline is unimplemented and always returns an error
+func (Conn) SetReadDeadline(time.Time) error {
+	return ErrUnimplemented
+}
+
+// SetWriteDeadline is unimplemented and always returns an error
+func (Conn) SetWriteDeadline(time.Time) error {
+	return ErrUnimplemented
+}
+
+// Errors
+var ErrUnimplemented = errors.New("not implmented")
