@@ -50,33 +50,54 @@ type Conn struct {
 	io.Reader
 	io.Writer
 	io.Closer
-	Local, Remote net.Addr
+	Local, Remote               net.Addr
+	ReadDeadline, WriteDeadline time.Time
+}
+
+// Read implements the io.Reader interface
+func (c *Conn) Read(p []byte) (int, error) {
+	if time.Now().After(c.ReadDeadline) {
+		return 0, ErrTimeout
+	}
+	return c.Reader.Read(p)
+}
+
+// Write implements the io.Writer interface
+func (c *Conn) Write(p []byte) (int, error) {
+	if time.Now().After(c.WriteDeadline) {
+		return 0, ErrTimeout
+	}
+	return c.Writer.Write(p)
 }
 
 // LocalAddr returns the Local Address
-func (c Conn) LocalAddr() net.Addr {
+func (c *Conn) LocalAddr() net.Addr {
 	return c.Local
 }
 
 // RemoteAddr returns the Remote Address
-func (c Conn) RemoteAddr() net.Addr {
+func (c *Conn) RemoteAddr() net.Addr {
 	return c.Remote
 }
 
 // SetDeadline is unimplemented and always returns an error
-func (Conn) SetDeadline(time.Time) error {
-	return ErrUnimplemented
+func (c *Conn) SetDeadline(t time.Time) error {
+	c.ReadDeadline = t
+	c.WriteDeadline = t
+	return nil
 }
 
 // SetReadDeadline is unimplemented and always returns an error
-func (Conn) SetReadDeadline(time.Time) error {
-	return ErrUnimplemented
+func (c *Conn) SetReadDeadline(t time.Time) error {
+	c.ReadDeadline = t
+	return nil
 }
 
 // SetWriteDeadline is unimplemented and always returns an error
-func (Conn) SetWriteDeadline(time.Time) error {
-	return ErrUnimplemented
+func (c *Conn) SetWriteDeadline(t time.Time) error {
+	c.WriteDeadline = t
+	return nil
 }
 
-// Errors
-var ErrUnimplemented = errors.New("not implmented")
+// Timeout Error
+var ErrTimeout = errors.New("timeout occurred")
