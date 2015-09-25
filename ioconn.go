@@ -82,20 +82,33 @@ func (c *Conn) RemoteAddr() net.Addr {
 
 // SetDeadline is unimplemented and always returns an error
 func (c *Conn) SetDeadline(t time.Time) error {
-	c.ReadDeadline = t
-	c.WriteDeadline = t
-	return nil
+	err := c.SetReadDeadline(t)
+	err2 := c.SetWriteDeadline(t)
+	if err != nil {
+		return err
+	}
+	return err2
 }
 
 // SetReadDeadline is unimplemented and always returns an error
 func (c *Conn) SetReadDeadline(t time.Time) error {
 	c.ReadDeadline = t
+	if rd, ok := c.Writer.(interface {
+		SetReadDeadline(time.Time) error
+	}); ok {
+		return rd.SetReadDeadline(t)
+	}
 	return nil
 }
 
 // SetWriteDeadline is unimplemented and always returns an error
 func (c *Conn) SetWriteDeadline(t time.Time) error {
 	c.WriteDeadline = t
+	if wd, ok := c.Writer.(interface {
+		SetWriteDeadline(time.Time) error
+	}); ok {
+		return wd.SetWriteDeadline(t)
+	}
 	return nil
 }
 
