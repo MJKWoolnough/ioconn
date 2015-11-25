@@ -80,7 +80,7 @@ func (c *Conn) RemoteAddr() net.Addr {
 	return c.Remote
 }
 
-// SetDeadline is unimplemented and always returns an error
+// SetDeadline implements the Conn SetDeadline method
 func (c *Conn) SetDeadline(t time.Time) error {
 	err := c.SetReadDeadline(t)
 	err2 := c.SetWriteDeadline(t)
@@ -90,7 +90,7 @@ func (c *Conn) SetDeadline(t time.Time) error {
 	return err2
 }
 
-// SetReadDeadline is unimplemented and always returns an error
+// SetReadDeadline implements the Conn SetReadDeadline method
 func (c *Conn) SetReadDeadline(t time.Time) error {
 	c.ReadDeadline = t
 	if rd, ok := c.Writer.(interface {
@@ -101,7 +101,7 @@ func (c *Conn) SetReadDeadline(t time.Time) error {
 	return nil
 }
 
-// SetWriteDeadline is unimplemented and always returns an error
+// SetWriteDeadline implements the Conn SetWriteDeadline method
 func (c *Conn) SetWriteDeadline(t time.Time) error {
 	c.WriteDeadline = t
 	if wd, ok := c.Writer.(interface {
