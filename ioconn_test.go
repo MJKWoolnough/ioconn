@@ -10,7 +10,7 @@ var (
 	_ io.Closer = CloserFunc(nil)
 	_ net.Addr  = FileAddr("")
 	_ net.Addr  = Addr{}
-	_ net.Conn  = Conn{}
+	_ net.Conn  = &Conn{}
 )
 
 func TestT(*testing.T) {
