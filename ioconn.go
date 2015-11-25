@@ -56,7 +56,7 @@ type Conn struct {
 
 // Read implements the io.Reader interface
 func (c *Conn) Read(p []byte) (int, error) {
-	if time.Now().After(c.ReadDeadline) {
+	if !c.ReadDeadline.IsZero() && time.Now().After(c.ReadDeadline) {
 		return 0, ErrTimeout
 	}
 	return c.Reader.Read(p)
@@ -64,7 +64,7 @@ func (c *Conn) Read(p []byte) (int, error) {
 
 // Write implements the io.Writer interface
 func (c *Conn) Write(p []byte) (int, error) {
-	if time.Now().After(c.WriteDeadline) {
+	if !c.ReadDeadline.IsZero() && time.Now().After(c.WriteDeadline) {
 		return 0, ErrTimeout
 	}
 	return c.Writer.Write(p)
