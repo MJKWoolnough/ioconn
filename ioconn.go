@@ -112,5 +112,7 @@ func (c *Conn) SetWriteDeadline(t time.Time) error {
 	return nil
 }
 
-// Timeout Error
-var ErrTimeout = errors.New("timeout occurred")
+// Errors
+var (
+	ErrTimeout = errors.New("timeout occurred")
+)
