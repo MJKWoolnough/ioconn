@@ -2,12 +2,15 @@
 --
     import "github.com/MJKWoolnough/ioconn"
 
-Package ioconn allows any combination of an io.Reader, io.Writer and io.Closer to become a net.Conn
+Package ioconn allows any combination of an io.Reader, io.Writer and io.Closer
+to become a net.Conn
 
 ## Usage
 
 ```go
-var ErrUnimplemented = errors.New("not implmented")
+var (
+	ErrTimeout = errors.New("timeout occurred")
+)
 ```
 Errors
 
@@ -58,46 +61,61 @@ type Conn struct {
 	io.Reader
 	io.Writer
 	io.Closer
-	Local, Remote net.Addr
+	Local, Remote               net.Addr
+	ReadDeadline, WriteDeadline time.Time
 }
 ```
 
 Conn implements a net.Conn
 
-#### func (Conn) LocalAddr
+#### func (*Conn) LocalAddr
 
 ```go
-func (c Conn) LocalAddr() net.Addr
+func (c *Conn) LocalAddr() net.Addr
 ```
 LocalAddr returns the Local Address
 
-#### func (Conn) RemoteAddr
+#### func (*Conn) Read
 
 ```go
-func (c Conn) RemoteAddr() net.Addr
+func (c *Conn) Read(p []byte) (int, error)
+```
+Read implements the io.Reader interface
+
+#### func (*Conn) RemoteAddr
+
+```go
+func (c *Conn) RemoteAddr() net.Addr
 ```
 RemoteAddr returns the Remote Address
 
-#### func (Conn) SetDeadline
+#### func (*Conn) SetDeadline
 
 ```go
-func (Conn) SetDeadline(time.Time) error
+func (c *Conn) SetDeadline(t time.Time) error
 ```
-SetDeadline is unimplemented and always returns an error
+SetDeadline implements the Conn SetDeadline method
 
-#### func (Conn) SetReadDeadline
+#### func (*Conn) SetReadDeadline
 
 ```go
-func (Conn) SetReadDeadline(time.Time) error
+func (c *Conn) SetReadDeadline(t time.Time) error
 ```
-SetReadDeadline is unimplemented and always returns an error
+SetReadDeadline implements the Conn SetReadDeadline method
 
-#### func (Conn) SetWriteDeadline
+#### func (*Conn) SetWriteDeadline
 
 ```go
-func (Conn) SetWriteDeadline(time.Time) error
+func (c *Conn) SetWriteDeadline(t time.Time) error
 ```
-SetWriteDeadline is unimplemented and always returns an error
+SetWriteDeadline implements the Conn SetWriteDeadline method
+
+#### func (*Conn) Write
+
+```go
+func (c *Conn) Write(p []byte) (int, error)
+```
+Write implements the io.Writer interface
 
 #### type FileAddr
 
