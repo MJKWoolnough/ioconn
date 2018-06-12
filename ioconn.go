@@ -1,5 +1,5 @@
 // Package ioconn allows any combination of an io.Reader, io.Writer and io.Closer to become a net.Conn
-package ioconn
+package ioconn // import "vimagination.zapto.org/ioconn"
 
 import (
 	"errors"
