@@ -1,6 +1,6 @@
 # ioconn
 --
-    import "github.com/MJKWoolnough/ioconn"
+    import "vimagination.zapto.org/ioconn"
 
 Package ioconn allows any combination of an io.Reader, io.Writer and io.Closer
 to become a net.Conn
