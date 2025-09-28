@@ -98,7 +98,7 @@ func (c *Conn) SetDeadline(t time.Time) error {
 func (c *Conn) SetReadDeadline(t time.Time) error {
 	c.ReadDeadline = t
 
-	if rd, ok := c.Writer.(interface {
+	if rd, ok := c.Reader.(interface {
 		SetReadDeadline(time.Time) error
 	}); ok {
 		return rd.SetReadDeadline(t)
