@@ -2,6 +2,7 @@
 package ioconn // import "vimagination.zapto.org/ioconn"
 
 import (
+	"cmp"
 	"errors"
 	"io"
 	"net"
@@ -84,14 +85,7 @@ func (c *Conn) RemoteAddr() net.Addr {
 
 // SetDeadline implements the Conn SetDeadline method.
 func (c *Conn) SetDeadline(t time.Time) error {
-	err := c.SetReadDeadline(t)
-	err2 := c.SetWriteDeadline(t)
-
-	if err != nil {
-		return err
-	}
-
-	return err2
+	return cmp.Or(c.SetReadDeadline(t), c.SetWriteDeadline(t))
 }
 
 // SetReadDeadline implements the Conn SetReadDeadline method.
