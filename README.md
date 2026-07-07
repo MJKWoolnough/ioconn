@@ -2,7 +2,6 @@
 
 [![CI](https://github.com/MJKWoolnough/ioconn/actions/workflows/go-checks.yml/badge.svg)](https://github.com/MJKWoolnough/ioconn/actions)
 [![Go Reference](https://pkg.go.dev/badge/vimagination.zapto.org/ioconn.svg)](https://pkg.go.dev/vimagination.zapto.org/ioconn)
-[![Go Report Card](https://goreportcard.com/badge/vimagination.zapto.org/ioconn)](https://goreportcard.com/report/vimagination.zapto.org/ioconn)
 
 --
     import "vimagination.zapto.org/ioconn"
